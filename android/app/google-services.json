@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "406607363553",
+    "project_id": "ranyacity-986c8",
+    "storage_bucket": "ranyacity-986c8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406607363553:android:55c3c0a53b29b4af2ce6a0",
+        "android_client_info": {
+          "package_name": "com.ranyacity.net.ranyacity"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCndQfH-_N6RESaUgqxl8y8c1S7Alrciag"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
