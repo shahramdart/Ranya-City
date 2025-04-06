@@ -67,16 +67,19 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: kBackgroundColor,
         drawer: Drawer(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment
+                .start, // Align items to the left for better readability
             children: [
               UserAccountsDrawerHeader(
                 accountName: Text("Welcome!"),
                 accountEmail: currentUser != null
-                    ? Text(currentUser.email ?? 'No email')
+                    ? Text(currentUser.email ?? '')
                     : SizedBox.shrink(),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.person, color: Colors.orange),
+                  child: Center(
+                    child: Image.asset('assets/images/Code Craft.png'),
+                  ),
                 ),
                 decoration: BoxDecoration(color: Colors.orange),
               ),
@@ -84,33 +87,46 @@ class _HomeScreenState extends State<HomeScreen> {
                 leading: Icon(IconlyLight.home),
                 title: Text("Home"),
                 onTap: () {
-                  Get.back(); // close drawer
+                  Get.back(); // Close drawer
                 },
               ),
+              // Show 'New Place' and 'Logout' if user is logged in
               if (currentUser != null) ...[
                 ListTile(
                   leading: Icon(IconlyLight.logout),
                   title: Text("Logout"),
                   onTap: () async {
                     await _auth.signOut();
-                    Get.offAllNamed('/login'); // go to login screen
+                    Get.offAllNamed('/'); // Go to login screen
+                  },
+                ),
+                ListTile(
+                  leading: Icon(IconlyLight.upload),
+                  title: Text("New Place"),
+                  onTap: () {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null) {
+                      Get.toNamed('/newPlace');
+                    } else {
+                      Get.snackbar(
+                        "Login Required",
+                        "Please log in to continue.",
+                      );
+                      Get.toNamed('/login');
+                    }
                   },
                 ),
               ],
-              ListTile(
-                leading: Icon(IconlyLight.upload),
-                title: Text("New Place"),
-                onTap: () {
-                  final user = FirebaseAuth.instance.currentUser;
-                  if (user != null) {
-                    Get.toNamed('/newPlace');
-                  } else {
-                    Get.snackbar(
-                        "Login Required", "Please log in to continue.");
+              // Show 'Login' if no user is logged in
+              if (currentUser == null) ...[
+                ListTile(
+                  leading: Icon(IconlyLight.login),
+                  title: Text("Login"),
+                  onTap: () {
                     Get.toNamed('/login');
-                  }
-                },
-              ),
+                  },
+                ),
+              ],
             ],
           ),
         ),

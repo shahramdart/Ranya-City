@@ -110,41 +110,57 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
         actions: [
           Container(
             padding: const EdgeInsets.all(2),
-            child: currentUser != null
-                ? IconButton(
+            child: Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceBetween, // Distribute space evenly
+              children: [
+                IconButton(
+                  onPressed: () {
+                    final placeId = widget.destination.id; // Get the place ID
+                    if (appServices.isFavorite(placeId)) {
+                      appServices
+                          .toggleFavorite(placeId); // Remove from favorites
+                    } else {
+                      appServices.toggleFavorite(placeId); // Add to favorites
+                    }
+                  },
+                  icon: Obx(() {
+                    return Icon(
+                      appServices.isFavorite(widget.destination.id)
+                          ? IconlyBold.heart
+                          : IconlyLight.heart,
+                      color: appServices.isFavorite(widget.destination.id)
+                          ? Colors.red
+                          : Colors.grey, // Red if favorited, grey if not
+                    );
+                  }),
+                ),
+                if (currentUser != null) ...[
+                  IconButton(
                     onPressed: () {
                       Get.to(() => UpdatePlaceScreen(
-                          placeId: widget.destination.id,
-                          initialName: widget.destination.namePlace,
-                          initialRate: widget.destination.rate,
-                          initialDescription: widget.destination.description,
-                          initialImageUrls: widget.destination.imageUrls!,
-                          initialCategory: widget.destination.category,
-                          initialLatitude: widget.destination.latitude,
-                          initialLongitude: widget.destination.longitude));
+                            placeId: widget.destination.id,
+                            initialName: widget.destination.namePlace,
+                            initialRate: widget.destination.rate,
+                            initialDescription: widget.destination.description,
+                            initialImageUrls: widget.destination.imageUrls!,
+                            initialCategory: widget.destination.category,
+                            initialLatitude: widget.destination.latitude,
+                            initialLongitude: widget.destination.longitude,
+                          ));
                     },
-                    icon: Icon(IconlyLight.edit))
-                : IconButton(
-                    onPressed: () {
-                      final placeId = widget.destination.id; // Get the place ID
-                      if (appServices.isFavorite(placeId)) {
-                        appServices
-                            .toggleFavorite(placeId); // Remove from favorites
-                      } else {
-                        appServices.toggleFavorite(placeId); // Add to favorites
-                      }
-                    },
-                    icon: Obx(() {
-                      return Icon(
-                        appServices.isFavorite(widget.destination.id)
-                            ? IconlyBold.heart
-                            : IconlyLight.heart,
-                        color: appServices.isFavorite(widget.destination.id)
-                            ? Colors.red
-                            : Colors.grey, // Red if favorited, grey if not
-                      );
-                    }),
+                    icon: Icon(IconlyLight.edit),
                   ),
+                  IconButton(
+                    onPressed: () {
+                      appServices.deletePlace(widget.destination.id);
+                      Get.back();
+                    },
+                    icon: Icon(IconlyLight.delete),
+                  ),
+                ]
+              ],
+            ),
           ),
           const SizedBox(width: 10),
         ],
@@ -276,12 +292,20 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              widget.destination.namePlace,
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.6,
+                                              child: Text(
+                                                widget.destination.namePlace,
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 2,
                                               ),
                                             ),
                                             const SizedBox(height: 5),

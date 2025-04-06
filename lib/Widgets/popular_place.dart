@@ -72,11 +72,19 @@ class PopularPlace extends StatelessWidget {
                                   size: 18,
                                 ),
                                 const SizedBox(width: 5),
-                                Text(
-                                  destination.namePlace,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.6,
+                                  child: Text(
+                                    destination.namePlace,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                    overflow: TextOverflow
+                                        .ellipsis, // Ensures that the text doesn't overflow
+                                    maxLines:
+                                        1, // Makes sure the text stays on a single line
                                   ),
                                 )
                               ],

@@ -80,6 +80,6 @@ class AuthController extends GetxController {
 
   void logout() async {
     await _auth.signOut();
-    Get.offAllNamed('/login');
+    Get.offAllNamed('/');
   }
 }

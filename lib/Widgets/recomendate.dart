@@ -57,11 +57,18 @@ class Recomendate extends StatelessWidget {
                       color: Colors.black,
                       size: 16,
                     ),
-                    Text(
-                      destination.namePlace,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black.withOpacity(0.6),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: Text(
+                        destination.namePlace,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.black.withOpacity(0.6),
+                        ),
+                        overflow: TextOverflow
+                            .ellipsis, // Ensures that the text doesn't overflow
+                        maxLines:
+                            1, // Makes sure the text stays on a single line
                       ),
                     )
                   ],

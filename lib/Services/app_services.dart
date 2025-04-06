@@ -134,4 +134,23 @@ class AppServices extends GetxController {
     }
     saveFavorites(); // Save to SharedPreferences after modification
   }
+
+  // Delete a place from Firestore
+  Future<void> deletePlace(String placeId) async {
+    try {
+      // Delete the place from Firestore
+      await FirebaseFirestore.instance
+          .collection('places')
+          .doc(placeId)
+          .delete();
+
+      // Remove the place from the local lists
+      popular.removeWhere((place) => place.id == placeId);
+      recommendate.removeWhere((place) => place.id == placeId);
+
+      print("Place with ID $placeId deleted successfully");
+    } catch (e) {
+      print("Error deleting place: $e");
+    }
+  }
 }
