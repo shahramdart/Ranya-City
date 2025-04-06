@@ -60,6 +60,11 @@
 	<string>We need access to your photo library to pick images.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need access to your microphone for video capture.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location for this feature</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location for this feature</string>
+
 	
 	
 </dict>

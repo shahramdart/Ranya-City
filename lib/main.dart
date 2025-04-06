@@ -1,29 +1,34 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:get/instance_manager.dart';
+import 'package:get/get.dart';
 import 'package:ranyacity/Config/app_routes.dart';
-import 'package:ranyacity/Pages/Admin/Auth/auth.dart';
 import 'package:ranyacity/Pages/Splash/splash_screenda.dart';
-import 'package:ranyacity/firebase_options.dart';
+import 'package:ranyacity/Services/app_services.dart';
+import 'package:ranyacity/Pages/Admin/Auth/auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  // Initialize Firebase
+  await Firebase.initializeApp();
+
+  // Initialize AppServices and AuthController
   Get.put(AuthController());
+  Get.put(AppServices());
+
+  // Load favorites asynchronously
+  await Get.find<AppServices>().loadFavorites();
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Ranya City',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

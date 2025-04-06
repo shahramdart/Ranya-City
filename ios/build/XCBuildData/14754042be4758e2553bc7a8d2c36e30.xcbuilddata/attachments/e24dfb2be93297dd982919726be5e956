@@ -1,0 +1,23 @@
+/Volumes/Sinan/ranyacity/ios/Pods/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/BoringSSL-GRPC/openssl_grpc.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/FirebaseAppCheckInterop/FirebaseAppCheckInterop.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/FirebaseAuth/FirebaseAuth.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/FirebaseAuthInterop/FirebaseAuthInterop.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/FirebaseCore/FirebaseCore.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/FirebaseCoreExtension/FirebaseCoreExtension.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/FirebaseCoreInternal/FirebaseCoreInternal.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/FirebaseFirestore/FirebaseFirestore.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/FirebaseSharedSwift/FirebaseSharedSwift.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/FirebaseStorage/FirebaseStorage.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/GTMSessionFetcher/GTMSessionFetcher.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/GoogleUtilities/GoogleUtilities.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/RecaptchaInterop/RecaptchaInterop.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/abseil/absl.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/gRPC-C++/grpcpp.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/gRPC-Core/grpc.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/image_picker_ios/image_picker_ios.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/leveldb-library/leveldb.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/nanopb/nanopb.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/shared_preferences_foundation/shared_preferences_foundation.framework
+/Volumes/Sinan/ranyacity/ios/build/Release-iphoneos/url_launcher_ios/url_launcher_ios.framework

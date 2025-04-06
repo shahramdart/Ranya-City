@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:ranyacity/Config/const.dart';
 import 'package:ranyacity/Models/onboarding_model.dart';
+import 'package:ranyacity/Models/travels_model.dart';
 
 class Recomendate extends StatelessWidget {
   final TravelDestination destination;
@@ -28,7 +30,7 @@ class Recomendate extends StatelessWidget {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage(
-                  destination.image![0],
+                  destination.imageUrls![0],
                 ),
               ),
             ),
@@ -40,7 +42,7 @@ class Recomendate extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  destination.name,
+                  destination.category,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.black,
@@ -56,7 +58,7 @@ class Recomendate extends StatelessWidget {
                       size: 16,
                     ),
                     Text(
-                      destination.location,
+                      destination.namePlace,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.black.withOpacity(0.6),
@@ -65,57 +67,16 @@ class Recomendate extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 5),
-                Row(
-                  children: [
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "${destination.rate}",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
-                            ),
-                          ),
-                          TextSpan(
-                            text: " (${destination.review} reviews)",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black.withOpacity(0.6),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
               ],
             ),
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Spacer(),
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "\$${destination.price}",
-                      style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: blueTextColor),
-                    ),
-                    TextSpan(
-                      text: " /Person",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black.withOpacity(0.6),
-                      ),
-                    ),
-                  ],
-                ),
+              Icon(
+                IconlyLight.arrow_left_2,
+                size: 30,
+                color: Colors.grey.shade400,
               ),
             ],
           )

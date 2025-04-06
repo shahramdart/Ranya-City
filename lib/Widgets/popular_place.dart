@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ranyacity/Models/onboarding_model.dart';
+import 'package:ranyacity/Models/travels_model.dart';
 
 class PopularPlace extends StatelessWidget {
   final TravelDestination destination;
@@ -36,7 +37,7 @@ class PopularPlace extends StatelessWidget {
               image: DecorationImage(
                 fit: BoxFit.cover,
                 image: NetworkImage(
-                  destination.image![0],
+                  destination.imageUrls![0],
                 ),
               ),
             ),
@@ -55,7 +56,7 @@ class PopularPlace extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              destination.name,
+                              destination.category,
                               style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.white,
@@ -72,7 +73,7 @@ class PopularPlace extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 5),
                                 Text(
-                                  destination.location,
+                                  destination.namePlace,
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
@@ -82,24 +83,24 @@ class PopularPlace extends StatelessWidget {
                             )
                           ],
                         ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.star_rounded,
-                              size: 22,
-                              color: Colors.amber[800],
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              destination.rate.toString(),
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            )
-                          ],
-                        )
+                        // Row(
+                        //   children: [
+                        //     Icon(
+                        //       Icons.star_rounded,
+                        //       size: 22,
+                        //       color: Colors.amber[800],
+                        //     ),
+                        //     const SizedBox(width: 5),
+                        //     Text(
+                        //       destination.rate.toString(),
+                        //       style: const TextStyle(
+                        //         fontSize: 15,
+                        //         fontWeight: FontWeight.bold,
+                        //         color: Colors.white,
+                        //       ),
+                        //     )
+                        //   ],
+                        // )
                       ],
                     ),
                   ),

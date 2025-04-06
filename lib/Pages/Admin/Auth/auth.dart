@@ -17,6 +17,13 @@ class AuthController extends GetxController {
   }
 
   void signup() async {
+    if (email.value.isEmpty ||
+        password.value.isEmpty ||
+        confirmPassword.value.isEmpty) {
+      Get.snackbar("Error", "All fields are required");
+      return;
+    }
+
     if (password.value != confirmPassword.value) {
       Get.snackbar("Error", "Passwords do not match");
       return;
@@ -31,10 +38,12 @@ class AuthController extends GetxController {
         password: password.value,
       );
 
+      // Automatically login after signup
+      login();
+
       Get.back(); // Close loading
-      print("✅ Account created: ${userCredential.user?.email}");
+      print("✅ Account created and logged in: ${userCredential.user?.email}");
       Get.snackbar("Success", "Welcome ${userCredential.user?.email}");
-      Get.offAllNamed('/login');
     } on FirebaseAuthException catch (e) {
       Get.back(); // Close loading
       print("🔥 FirebaseAuthException: ${e.code} - ${e.message}");
@@ -48,7 +57,7 @@ class AuthController extends GetxController {
 
   void login() async {
     try {
-      if (email.isEmpty || password.isEmpty) {
+      if (email.value.isEmpty || password.value.isEmpty) {
         Get.snackbar("Error", "Email and password are required");
         return;
       }
