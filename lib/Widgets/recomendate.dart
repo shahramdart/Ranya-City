@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
-import 'package:ranyacity/Config/const.dart';
-import 'package:ranyacity/Models/onboarding_model.dart';
 import 'package:ranyacity/Models/travels_model.dart';
 
 class Recomendate extends StatelessWidget {

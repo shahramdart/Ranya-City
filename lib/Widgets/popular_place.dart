@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ranyacity/Models/onboarding_model.dart';
 import 'package:ranyacity/Models/travels_model.dart';
 
 class PopularPlace extends StatelessWidget {

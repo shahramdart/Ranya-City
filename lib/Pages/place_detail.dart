@@ -1,10 +1,11 @@
+// ignore_for_file: unused_field
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ranyacity/Config/const.dart';
-import 'package:ranyacity/Models/onboarding_model.dart';
 import 'package:ranyacity/Models/travels_model.dart';
 import 'package:ranyacity/Pages/Admin/Form/update_place.dart';
 import 'package:ranyacity/Services/app_services.dart';

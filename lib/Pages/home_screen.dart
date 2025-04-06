@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:iconly/iconly.dart';
 import 'package:ranyacity/Config/app_size.dart';
 import 'package:ranyacity/Config/const.dart';
 import 'package:ranyacity/Config/theme.dart';
-import 'package:ranyacity/Models/travels_model.dart';
 import 'package:ranyacity/Services/app_services.dart'; // Make sure AppServices is imported
 import 'package:ranyacity/Pages/place_detail.dart';
 import 'package:ranyacity/Widgets/dropdown.dart';
@@ -132,10 +130,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         appBar: headerParts(),
         body: Obx(() {
-          if (appServices.noDataMessage!.value.isNotEmpty == true) {
+          if (appServices.noDataMessage.value.isNotEmpty == true) {
             return Center(
               child: Text(
-                appServices.noDataMessage!.value,
+                appServices.noDataMessage.value,
                 style: TextStyle(
                   fontSize: 18,
                   fontFamily: "kurdish",

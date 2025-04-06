@@ -1,6 +1,7 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ranyacity/Pages/Admin/Auth/Pages/login_screen.dart';
 import 'package:ranyacity/Pages/home_screen.dart';
 import 'package:ranyacity/Pages/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
