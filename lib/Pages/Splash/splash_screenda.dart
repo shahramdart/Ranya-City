@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:ranyacity/Pages/home_screen.dart';
 import 'package:ranyacity/Pages/onboarding_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +13,12 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     _checkRoute();
     return Scaffold(
-      body: Center(child: CircularProgressIndicator()),
+      body: Center(
+        child: Lottie.asset(
+          'assets/icons/rowLoading.json',
+          backgroundLoading: false,
+        ),
+      ),
     );
   }
 
@@ -26,10 +32,22 @@ class SplashScreen extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
 
     if (loggedIn) {
-      print("✅ User is already logged in: ${user!.email}");
-      Get.offAll(() => HomeScreen());
+      // print("✅ User is already logged in: ${user!.email}");
+      Get.offAll(
+        () => HomeScreen(),
+        transition: Transition.circularReveal,
+        duration: Duration(
+          milliseconds: 600,
+        ),
+      );
     } else {
-      Get.offAll(() => OnboardingScreen());
+      Get.offAll(
+        () => OnboardingScreen(),
+        transition: Transition.circularReveal,
+        duration: Duration(
+          milliseconds: 600,
+        ),
+      );
     }
   }
 }

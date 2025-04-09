@@ -47,6 +47,10 @@ class _NewPlaceScreenState extends State<NewPlaceScreen> {
     'پەیمانگە',
     'گەشتیاری',
     'زانکۆ',
+    'نوسینگە',
+    'بازاڕ',
+    'سوپەرمارکێت',
+    'کتێبخانە',
   ];
 
   @override

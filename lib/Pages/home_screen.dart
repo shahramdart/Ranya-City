@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:iconly/iconly.dart';
+import 'package:lottie/lottie.dart';
 import 'package:ranyacity/Config/app_size.dart';
 import 'package:ranyacity/Config/const.dart';
 import 'package:ranyacity/Config/theme.dart';
+import 'package:ranyacity/Pages/Admin/Auth/Pages/login_screen.dart';
+import 'package:ranyacity/Pages/Splash/splash_screenda.dart';
 import 'package:ranyacity/Services/app_services.dart'; // Make sure AppServices is imported
 import 'package:ranyacity/Pages/place_detail.dart';
 import 'package:ranyacity/Widgets/dropdown.dart';
@@ -38,6 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
     'پەیمانگە',
     'گەشتیاری',
     'زانکۆ',
+    'نوسینگە',
+    'بازاڕ',
+    'سوپەرمارکێت',
+    'کتێبخانە',
   ];
 
   Rx<String?> noDataMessage =
@@ -69,17 +76,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 .start, // Align items to the left for better readability
             children: [
               UserAccountsDrawerHeader(
-                accountName: Text("Welcome!"),
+                accountName: Text(
+                  "Welcome To Ranya City",
+                  style: TextStyle(
+                    fontFamily: "English",
+                  ),
+                ),
                 accountEmail: currentUser != null
                     ? Text(currentUser.email ?? '')
                     : SizedBox.shrink(),
                 currentAccountPicture: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Center(
-                    child: Image.asset('assets/images/Code Craft.png'),
+                    child: Image.asset('assets/images/fam.png'),
                   ),
                 ),
-                decoration: BoxDecoration(color: Colors.orange),
+                decoration: BoxDecoration(
+                  color: RiveAppTheme.background2,
+                ),
               ),
               ListTile(
                 leading: Icon(IconlyLight.home),
@@ -95,7 +109,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: Text("Logout"),
                   onTap: () async {
                     await _auth.signOut();
-                    Get.offAllNamed('/'); // Go to login screen
+                    Get.offAll(
+                      () => SplashScreen(),
+                      transition: Transition.circularReveal,
+                      duration: Duration(milliseconds: 600),
+                    ); // Go to login screen
                   },
                 ),
                 ListTile(
@@ -121,7 +139,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   leading: Icon(IconlyLight.login),
                   title: Text("Login"),
                   onTap: () {
-                    Get.toNamed('/login');
+                    Get.to(
+                      () => LoginScreen(),
+                      transition: Transition.circularReveal,
+                      duration: Duration(milliseconds: 600),
+                    );
                   },
                 ),
               ],
@@ -144,7 +166,12 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           } else if (appServices.isLoading) {
             // Show loading spinner while loading
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: Lottie.asset(
+                'assets/icons/rowLoading.json',
+                backgroundLoading: false,
+              ),
+            );
           } else {
             return Directionality(
               textDirection: TextDirection.rtl,
@@ -293,6 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: _showFilterModal,
           icon: Icon(
             IconlyBold.filter_2,
+            color: RiveAppTheme.background2,
           ),
         ),
       ],
