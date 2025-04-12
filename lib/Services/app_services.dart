@@ -27,6 +27,7 @@ class AppServices extends GetxController {
     'بازاڕ',
     'سوپەرمارکێت',
     'کتێبخانە',
+    'مۆزەخانە',
   ];
 
   // Getter for loading state

@@ -73,6 +73,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
     'بازاڕ',
     'سوپەرمارکێت',
     'کتێبخانە',
+      'مۆزەخانە',
   ];
 
   @override

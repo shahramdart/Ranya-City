@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'بازاڕ',
     'سوپەرمارکێت',
     'کتێبخانە',
+    'مۆزەخانە',
   ];
 
   Rx<String?> noDataMessage =
@@ -184,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
                               "شوێنە بەناوبانگەکان",
@@ -195,14 +196,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fontFamily: "kurdish",
                               ),
                             ),
-                            Text(
-                              "بینینی زیاتر",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: blueTextColor,
-                                fontFamily: "kurdish",
-                              ),
-                            )
+                            // Text(
+                            //   "بینینی زیاتر",
+                            //   style: TextStyle(
+                            //     fontSize: 14,
+                            //     color: blueTextColor,
+                            //     fontFamily: "kurdish",
+                            //   ),
+                            // )
                           ],
                         ),
                       ),
@@ -242,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
                               "پێشنیار بۆ ئێوە",
@@ -253,14 +254,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fontFamily: "kurdish",
                               ),
                             ),
-                            Text(
-                              "بینینی زیاتر",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: blueTextColor,
-                                fontFamily: "kurdish",
-                              ),
-                            )
+                            // Text(
+                            //   "بینینی زیاتر",
+                            //   style: TextStyle(
+                            //     fontSize: 14,
+                            //     color: blueTextColor,
+                            //     fontFamily: "kurdish",
+                            //   ),
+                            // )
                           ],
                         ),
                       ),

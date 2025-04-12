@@ -25,7 +25,7 @@ class SplashScreen extends StatelessWidget {
   void _checkRoute() async {
     await Future.delayed(Duration(milliseconds: 500));
     final prefs = await SharedPreferences.getInstance();
-    final seen = prefs.getBool('onboarding_seen') ?? false;
+    final seen = prefs.getBool('onboarding_seen') ?? true;
     final loggedIn = FirebaseAuth.instance.currentUser != null;
 
     // print('DEBUG => onboarding_seen: \$seen, loggedIn: \$loggedIn');

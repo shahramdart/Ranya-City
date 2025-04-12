@@ -9,24 +9,29 @@ import 'package:ranyacity/Pages/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardModel {
-  String image, name;
+  String image, name, description;
 
-  OnboardModel({required this.image, required this.name});
+  OnboardModel(
+      {required this.image, required this.name, required this.description});
 }
 
 List<OnboardModel> onboarding = [
   OnboardModel(
     image: 'assets/images/R__TeyZpnNuME1k-.jpeg',
     name: 'بەخێربێی بۆ شاری ڕانیە',
+    description: '',
   ),
   OnboardModel(
-    image: 'assets/images/IMG_0056.JPG',
-    name: "ئێوارانی ڕانیە",
+    image: 'assets/images/DJI_0705.jpg',
+    name: "ئێوارانی ڕانیە دڵەکان دەکاتەوە",
+    description:
+        'پیاسەیەکی ئێوارانی ڕانیە دەتوانێ هەموو جەنجاڵیەکانی ژیان و مێشک ئارام بکاتەوە',
   ),
   OnboardModel(
-    image: 'assets/images/IMG_0055.JPG',
-    name: '',
-  ),
+      image: 'assets/images/xabat.jpg',
+      name: 'خاباتی ڕانیە',
+      description:
+          'شوێنێکی گەشتیاری و خێزانی کە لە کۆتایی هەفتەدا هاوڵاتیان لەگەڵ خێزانەکانیان گەشت دەکەن بۆ خاباتی جوان و کاتێکی خۆش بەسەردەبەن'),
 ];
 
 class OnboardingScreen extends StatefulWidget {
@@ -134,7 +139,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Text(
                     onboarding[currentIndex].name,
                     style: TextStyle(
-                      fontSize: 70,
+                      fontSize: 60,
                       fontFamily: "kurdish",
                       color: Colors.white,
                       fontWeight: FontWeight.w400,
@@ -142,8 +147,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   SizedBox(height: 20),
-                  const Text(
-                    'بەخێربێن بۆ ڕانیە — تێکەڵەیەکی زیندوو لە نەریت و داهێنان، کە هەموو ئەزموونێک بۆ بەستنەوەی مرۆڤەکان، کولتوور و ئەگەرەکان دروستکراوە.',
+                  Text(
+                    onboarding[currentIndex].description,
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: "kurdish",
