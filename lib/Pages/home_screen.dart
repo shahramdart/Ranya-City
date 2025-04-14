@@ -8,6 +8,7 @@ import 'package:ranyacity/Config/const.dart';
 import 'package:ranyacity/Config/theme.dart';
 import 'package:ranyacity/Pages/Admin/Auth/Pages/login_screen.dart';
 import 'package:ranyacity/Pages/Splash/splash_screenda.dart';
+import 'package:ranyacity/Pages/favorite_screen.dart';
 import 'package:ranyacity/Services/app_services.dart'; // Make sure AppServices is imported
 import 'package:ranyacity/Pages/place_detail.dart';
 import 'package:ranyacity/Widgets/dropdown.dart';
@@ -29,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Category selection
   Rx<String?> selectedCategory = Rx<String?>(null); // Make sure this is an Rx
+  final Rx<String?> selectedTown = Rx<String?>(null);
 
   List<String> categories = [
     'شەقام',
@@ -48,6 +50,16 @@ class _HomeScreenState extends State<HomeScreen> {
     'مۆزەخانە',
   ];
 
+  // Towns list
+  List<String> towns = [
+    'ڕانیە',
+    'حاجیاوە',
+    'چوارقوڕنە',
+    'سەنگەسەر',
+    'ژاراوە',
+    'قەڵادزێ',
+  ];
+
   Rx<String?> noDataMessage =
       Rx<String?>(null); // Reactive variable for no data message
 
@@ -59,8 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Apply the selected filter
   void _applyFilters() {
-    appServices.setCategory(selectedCategory
-        .value); // Apply the filter based on the selected category
+    appServices.selectedCategory.value = selectedCategory.value;
+    appServices.selectedTown.value = selectedTown.value;
+    appServices.fetchPlacesByTownAndCategory();
   }
 
   @override
@@ -78,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               UserAccountsDrawerHeader(
                 accountName: Text(
-                  "Welcome To Ranya City",
+                  "Welcome To Raparin",
                   style: TextStyle(
                     fontFamily: "English",
                   ),
@@ -148,6 +161,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ],
+              ListTile(
+                leading: Icon(IconlyLight.heart),
+                title: Text("Favorite"),
+                onTap: () {
+                  Get.to(
+                    () => FavoriteScreen(),
+                    transition: Transition.circularReveal,
+                    duration: Duration(milliseconds: 600),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -308,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
   AppBar headerParts() {
     return AppBar(
       title: Text(
-        "شاری ڕانیە",
+        "دەڤەری ڕاپەڕین",
         style: TextStyle(
           fontSize: 22,
           fontFamily: "kurdish",
@@ -341,7 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       builder: (context) {
         return FractionallySizedBox(
-          heightFactor: 0.4,
+          heightFactor: 0.45,
           child: Directionality(
             textDirection: TextDirection.rtl,
             child: StatefulBuilder(
@@ -378,18 +402,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SizedBox(height: AppSizes.blockSizeHorizontal * 5),
 
-                        Obx(
-                          () => MyCustomDropDown(
+                        // Town dropdown
+                        Obx(() => MyCustomDropDown(
                               menuItemwidth: screenWidth * 0.92,
-                              dy: -20,
+                              dy: 10,
                               dx: 2,
-                              value: selectedCategory.value,
+                              value: selectedTown.value,
                               width: double.infinity,
                               onChanged: (value) {
-                                selectedCategory.value = value;
+                                selectedTown.value = value;
+                                appServices.selectedTown.value = value;
+                                appServices
+                                    .updateAvailableCategoriesForTown(); // Load categories for selected town
                               },
                               items: [
-                                // Placeholder item
                                 DropdownMenuItem<String>(
                                   value: null,
                                   child: Row(
@@ -398,31 +424,76 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Text(
                                         "هەموو شوێنەکان",
                                         style: TextStyle(
-                                          fontFamily: "kurdish",
-                                          fontSize: 16,
-                                        ),
-                                        textDirection: TextDirection.rtl,
+                                            fontFamily: "kurdish",
+                                            fontSize: 16),
                                       ),
                                     ],
                                   ),
                                 ),
+                                ...appServices.towns
+                                    .map((town) => DropdownMenuItem(
+                                          value: town,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(town,
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontFamily: "kurdish")),
+                                            ],
+                                          ),
+                                        )),
+                              ],
+                            )),
 
-                                ...categories
+                        SizedBox(height: 10),
+
+                        // Category dropdown
+                        Obx(() => MyCustomDropDown(
+                              menuItemwidth: screenWidth * 0.92,
+                              dy: -40,
+                              dx: 2,
+                              value: selectedCategory.value,
+                              width: double.infinity,
+                              onChanged: (value) {
+                                selectedCategory.value = value;
+                              },
+                              items: [
+                                DropdownMenuItem<String>(
+                                  value: null,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "هەموو ناوچەکان",
+                                        style: TextStyle(
+                                            fontFamily: "kurdish",
+                                            fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                ...appServices.categoriesForSelectedTown
                                     .map((category) => DropdownMenuItem(
-                                        value: category,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text(category,
+                                          value: category,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                category,
                                                 style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontFamily: "kurdish")),
-                                          ],
-                                        )))
-                                    .toList(),
-                              ]),
-                        ),
+                                                  fontSize: 18,
+                                                  fontFamily: "kurdish",
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )),
+                              ],
+                            )),
+
                         SizedBox(height: screenHeight * 0.1),
 
                         // Buttons
@@ -441,12 +512,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             MyCustomerButton(
                               btnName: 'گەڕانەوە',
                               onTap: () {
-                                appServices.selectedCategory.value =
-                                    null; // Reset category
-                                selectedCategory.value =
-                                    null; // Reset the local category
-                                appServices
-                                    .fetchPlacesByCategory(); // Fetch filtered places based on category
+                                appServices.selectedCategory.value = null;
+                                appServices.selectedTown.value = null;
+                                selectedCategory.value = null;
+                                selectedTown.value = null;
+                                appServices.fetchPlaces(); // full reset
                                 Get.back();
                               },
                               height: AppSizes.blockSizeHorizontal * 12,

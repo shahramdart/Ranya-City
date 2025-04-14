@@ -148,6 +148,7 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
                             initialCategory: widget.destination.category,
                             initialLatitude: widget.destination.latitude,
                             initialLongitude: widget.destination.longitude,
+                            initialTowns: widget.destination.towns,
                           ));
                     },
                     icon: Icon(IconlyLight.edit),

@@ -53,6 +53,17 @@ class _NewPlaceScreenState extends State<NewPlaceScreen> {
     'کتێبخانە',
     'مۆزەخانە',
   ];
+  // town selection
+  Rx<String?> selectedTown = Rx<String?>(null);
+
+  List<String> towns = [
+    'ڕانیە',
+    'حاجیاوە',
+    'چوارقوڕنە',
+    'سەنگەسەر',
+    'ژاراوە',
+    'قەڵادزێ',
+  ];
 
   @override
   void dispose() {
@@ -109,13 +120,25 @@ class _NewPlaceScreenState extends State<NewPlaceScreen> {
       return;
     }
 
-    if (imageFiles.isEmpty ||
-        descriptionController.text.isEmpty ||
-        namePlaceController.text.isEmpty ||
-        latitude == null ||
-        longitude == null ||
-        selectedCategory == null) {
-      Get.snackbar("Error", "All fields including category are required.");
+    if (imageFiles.isEmpty) {
+      Get.snackbar("هەڵە", "وێنەی شوێنەکە پێویستە دەستنیشان بکەی.");
+      return;
+    }
+    if (namePlaceController.text.isEmpty) {
+      Get.snackbar("هەڵە", "ناوی شوێنەکە پێویستە.");
+      return;
+    }
+
+    if (latitude == null || longitude == null) {
+      Get.snackbar("هەڵە", "ناونیشانی شوێنەکە (نەخشە) پێویستە.");
+      return;
+    }
+    if (selectedCategory == null) {
+      Get.snackbar("هەڵە", "جۆری شوێنەکە پێویستە.");
+      return;
+    }
+    if (selectedTown == null) {
+      Get.snackbar("هەڵە", "شارەکە پێویستە.");
       return;
     }
 
@@ -156,6 +179,7 @@ class _NewPlaceScreenState extends State<NewPlaceScreen> {
         'latitude': latitude,
         'longitude': longitude,
         'category': selectedCategory.value, // Added category field
+        'towns': selectedTown.value, // Added town field
         'created_at': Timestamp.now(),
       });
 
@@ -257,7 +281,7 @@ class _NewPlaceScreenState extends State<NewPlaceScreen> {
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       MyTextFieldIconly(
                         icon: IconlyBold.star,
@@ -265,13 +289,63 @@ class _NewPlaceScreenState extends State<NewPlaceScreen> {
                         controller: rateController,
                         vertical_top_icon: 0,
                         margin_top: 0,
-                        width: MediaQuery.of(context).size.width * 0.45,
+                        width: MediaQuery.of(context).size.width * 0.95,
                       ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       Obx(() => MyCustomDropDown(
                               dy: -10,
                               value: selectedCategory.value,
                               onChanged: (value) => setState(
                                   () => selectedCategory.value = value),
+                              items: [
+                                // Placeholder item
+                                DropdownMenuItem<String>(
+                                  value: null,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "ناوچە",
+                                        style: TextStyle(
+                                          fontFamily: "kurdish",
+                                          fontSize: 16,
+                                        ),
+                                        textDirection: TextDirection.rtl,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                ...categories
+                                    .map((category) => DropdownMenuItem(
+                                        value: category,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              category,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontFamily: "kurdish",
+                                              ),
+                                            ),
+                                          ],
+                                        )))
+                                    .toList(),
+                              ])),
+                      Obx(() => MyCustomDropDown(
+                              dy: -10,
+                              value: selectedTown.value,
+                              onChanged: (value) =>
+                                  setState(() => selectedTown.value = value),
                               items: [
                                 // Placeholder item
                                 DropdownMenuItem<String>(
@@ -291,7 +365,7 @@ class _NewPlaceScreenState extends State<NewPlaceScreen> {
                                   ),
                                 ),
 
-                                ...categories
+                                ...towns
                                     .map((category) => DropdownMenuItem(
                                         value: category,
                                         child: Row(

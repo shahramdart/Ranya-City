@@ -15,14 +15,14 @@ class Recomendate extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       padding: const EdgeInsets.symmetric(
-        horizontal: 10,
+        horizontal: 5,
         vertical: 5,
       ),
       child: Row(
         children: [
           Container(
             height: 95,
-            width: 110,
+            width: 100,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               image: DecorationImage(
@@ -33,7 +33,7 @@ class Recomendate extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 5),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,20 +53,32 @@ class Recomendate extends StatelessWidget {
                     const Icon(
                       Icons.location_on,
                       color: Colors.black,
-                      size: 16,
+                      size: 15,
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: Text(
-                        destination.namePlace,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.black.withOpacity(0.6),
-                        ),
-                        overflow: TextOverflow
-                            .ellipsis, // Ensures that the text doesn't overflow
-                        maxLines:
-                            1, // Makes sure the text stays on a single line
+                      width: MediaQuery.of(context).size.width * 0.55,
+                      child: Row(
+                        children: [
+                          Text(
+                            '${destination.towns},',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black.withOpacity(0.6),
+                            ),
+                          ),
+                          SizedBox(width: 2),
+                          Text(
+                            destination.namePlace,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black.withOpacity(0.6),
+                            ),
+                            overflow: TextOverflow
+                                .ellipsis, // Ensures that the text doesn't overflow
+                            maxLines:
+                                1, // Makes sure the text stays on a single line
+                          ),
+                        ],
                       ),
                     )
                   ],

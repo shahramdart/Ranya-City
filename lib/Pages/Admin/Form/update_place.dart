@@ -23,6 +23,7 @@ class UpdatePlaceScreen extends StatefulWidget {
   final String initialDescription;
   final List<String> initialImageUrls;
   final String initialCategory;
+  final String initialTowns;
   final double initialLatitude;
   final double initialLongitude;
 
@@ -33,6 +34,7 @@ class UpdatePlaceScreen extends StatefulWidget {
     required this.initialRate,
     required this.initialDescription,
     required this.initialImageUrls,
+    required this.initialTowns,
     required this.initialCategory,
     required this.initialLatitude,
     required this.initialLongitude,
@@ -73,7 +75,19 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
     'بازاڕ',
     'سوپەرمارکێت',
     'کتێبخانە',
-      'مۆزەخانە',
+    'مۆزەخانە',
+  ];
+
+  // town selection
+  Rx<String?> selectedTown = Rx<String?>(null);
+
+  List<String> towns = [
+    'ڕانیە',
+    'حاجیاوە',
+    'چوارقوڕنە',
+    'سەنگەسەر',
+    'ژاراوە',
+    'قەڵادزێ',
   ];
 
   @override
@@ -83,6 +97,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
     rateController.text = widget.initialRate.toString();
     descriptionController.text = widget.initialDescription;
     selectedCategory.value = widget.initialCategory;
+    selectedTown.value = widget.initialTowns;
     latitude = widget.initialLatitude;
     longitude = widget.initialLongitude;
     imageUrls.value =
@@ -134,13 +149,25 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
       return;
     }
 
-    if (imageFiles.isEmpty &&
-        descriptionController.text.isEmpty &&
-        namePlaceController.text.isEmpty &&
-        latitude == null &&
-        longitude == null &&
-        selectedCategory.value == null) {
-      Get.snackbar("Error", "No changes made.");
+    if (imageFiles.isEmpty) {
+      Get.snackbar("هەڵە", "وێنەی شوێنەکە پێویستە دەستنیشان بکەی.");
+      return;
+    }
+    if (namePlaceController.text.isEmpty) {
+      Get.snackbar("هەڵە", "ناوی شوێنەکە پێویستە.");
+      return;
+    }
+
+    if (latitude == null || longitude == null) {
+      Get.snackbar("هەڵە", "ناونیشانی شوێنەکە (نەخشە) پێویستە.");
+      return;
+    }
+    if (selectedCategory == null) {
+      Get.snackbar("هەڵە", "جۆری شوێنەکە پێویستە.");
+      return;
+    }
+    if (selectedTown == null) {
+      Get.snackbar("هەڵە", "شارەکە پێویستە.");
       return;
     }
 
@@ -187,6 +214,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
         'latitude': latitude,
         'longitude': longitude,
         'category': selectedCategory.value,
+        'towns': selectedTown.value,
         'updated_at': Timestamp.now(),
       });
 
@@ -246,7 +274,7 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
               // Image Selection
@@ -278,12 +306,9 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                               },
                             )
                           : Center(
-                              child: Text(
-                                "وێنە دیاریبکە",
-                                style: TextStyle(
-                                  fontFamily: "kurdish",
-                                  fontSize: 22,
-                                ),
+                              child: Icon(
+                                Icons.add,
+                                size: 30,
                               ),
                             ),
                     ),
@@ -292,30 +317,32 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
               ),
               SizedBox(height: 20),
               // Current Images
-              Wrap(
-                children: List.generate(
-                  imageUrls.length,
-                  (index) => Stack(
-                    children: [
-                      Image.network(
-                        imageUrls[index],
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
+              // ✅ Fixed (reactive)
+              Obx(() => Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: List.generate(
+                      imageUrls.length,
+                      (index) => Stack(
+                        children: [
+                          Image.network(
+                            imageUrls[index],
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: IconButton(
+                              icon: Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => deleteImage(index),
+                            ),
+                          ),
+                        ],
                       ),
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
-                          onPressed: () =>
-                              deleteImage(index), // Call deleteImage here
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
+                  )),
               SizedBox(height: 20),
               MyTextFieldIconly(
                 icon: Icons.place,
@@ -337,18 +364,49 @@ class _UpdatePlaceScreenState extends State<UpdatePlaceScreen> {
                         items: categories
                             .map((category) => DropdownMenuItem<String>(
                                   value: category,
-                                  child: Text(category,
-                                      style: TextStyle(
-                                          fontSize: 18, fontFamily: "kurdish")),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(category,
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontFamily: "kurdish")),
+                                    ],
+                                  ),
                                 ))
                             .toList(),
                       )),
+                  Obx(() => MyCustomDropDown(
+                        dy: -10,
+                        value: selectedTown.value,
+                        onChanged: (value) => selectedTown.value =
+                            value, // Directly update reactive variable
+                        items: towns
+                            .map((category) => DropdownMenuItem<String>(
+                                  value: category,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(category,
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontFamily: "kurdish")),
+                                    ],
+                                  ),
+                                ))
+                            .toList(),
+                      )),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
                   MyTextFieldIconly(
                     icon: IconlyBold.star,
                     hintText: "پێدانی ڕەیتینگ",
                     controller: rateController,
                     vertical_top_icon: 0,
-                    margin_top: 0,
+                    margin_top: 15,
                     width: MediaQuery.of(context).size.width * 0.45,
                   ),
                 ],

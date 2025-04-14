@@ -30,6 +30,19 @@ class AppServices extends GetxController {
     'مۆزەخانە',
   ];
 
+  // Towns list
+  List<String> towns = [
+    'ڕانیە',
+    'حاجیاوە',
+    'چوارقوڕنە',
+    'سەنگەسەر',
+    'ژاراوە',
+    'قەڵادزێ',
+  ];
+
+// Selected town (used for uploading or filtering)
+  Rx<String?> selectedTown = Rx<String?>(null);
+
   // Getter for loading state
   bool get isLoading => _isLoading.value;
 
@@ -54,6 +67,38 @@ class AppServices extends GetxController {
       print("Fetched places: ${recommendate.length}");
     } catch (e) {
       print("Error fetching places: $e");
+    }
+  }
+
+  // fetching places by town
+  Future<void> fetchPlacesByTown() async {
+    _isLoading.value = true;
+    try {
+      Query query = FirebaseFirestore.instance.collection('places');
+
+      if (selectedTown.value != null) {
+        query = query.where('town', isEqualTo: selectedTown.value);
+      }
+
+      QuerySnapshot snapshot = await query.get();
+
+      popular.value = snapshot.docs
+          .map((doc) => TravelDestination.fromMap(
+              doc.data() as Map<String, dynamic>, doc.id))
+          .toList();
+
+      recommendate.value = popular.toList(); // or use another logic
+
+      if (popular.isEmpty) {
+        noDataMessage.value = "هیچ شوێنێک بۆ ئەم شارە نەدۆزرایەوە";
+      } else {
+        noDataMessage.value = '';
+      }
+    } catch (e) {
+      print("Error filtering by town: $e");
+      noDataMessage.value = "هەڵەیەک ڕوویدا لە کاتێک فلتەرکردنی شار";
+    } finally {
+      _isLoading.value = false;
     }
   }
 
@@ -102,6 +147,71 @@ class AppServices extends GetxController {
     fetchPlacesByCategory(); // Fetch filtered places when category changes
   }
 
+  void setTown(String? town) {
+    selectedTown.value = town;
+    updateAvailableCategoriesForTown();
+    fetchPlacesByTownAndCategory();
+  }
+
+ Future<void> fetchPlacesByTownAndCategory() async {
+  _isLoading.value = true;
+
+  try {
+    Query query = FirebaseFirestore.instance.collection('places');
+
+    if (selectedTown.value != null) {
+      query = query.where('town', isEqualTo: selectedTown.value); // ✅ fixed
+    }
+
+    if (selectedCategory.value != null) {
+      query = query.where('category', isEqualTo: selectedCategory.value);
+    }
+
+    QuerySnapshot snapshot = await query.get();
+
+    final places = snapshot.docs.map((doc) {
+      return TravelDestination.fromMap(
+          doc.data() as Map<String, dynamic>, doc.id);
+    }).toList();
+
+    popular.value = places;
+    recommendate.value = places;
+
+    noDataMessage.value =
+        places.isEmpty ? "هیچ شوێنێک بەو فلتەرە نەدۆزرایەوە" : '';
+  } catch (e) {
+    noDataMessage.value = "هەڵە لە کاتێک فلتەرکردنەوە.";
+    print("Error fetching by town & category: $e");
+  } finally {
+    _isLoading.value = false;
+  }
+}
+
+Future<void> updateAvailableCategoriesForTown() async {
+  if (selectedTown.value == null) {
+    categoriesForSelectedTown.assignAll(categories);
+    return;
+  }
+
+  try {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('places')
+        .where('town', isEqualTo: selectedTown.value) // ✅ fixed
+        .get();
+
+    final Set<String> foundCategories = snapshot.docs
+        .map((doc) => (doc.data() as Map<String, dynamic>)['category'] as String)
+        .toSet();
+
+    categoriesForSelectedTown.assignAll(foundCategories);
+  } catch (e) {
+    print("Error loading categories for town: $e");
+  }
+}
+
+// Add this reactive list at the top:
+  RxList<String> categoriesForSelectedTown = <String>[].obs;
+
   Future<List<TravelDestination>> fetchTravelDestinations() async {
     final querySnapshot =
         await FirebaseFirestore.instance.collection('places').get();
@@ -112,6 +222,8 @@ class AppServices extends GetxController {
   }
 
   RxList<String> favoritePlaces = <String>[].obs;
+
+  
 
   bool isFavorite(String placeId) {
     return favoritePlaces.contains(placeId);
@@ -138,6 +250,16 @@ class AppServices extends GetxController {
       favoritePlaces.add(placeId); // Add to favorites
     }
     saveFavorites(); // Save to SharedPreferences after modification
+  }
+
+  // Get Favorite places
+  List<TravelDestination> getFavoriteDestinations() {
+    return popular.where((place) => favoritePlaces.contains(place.id)).toList();
+  }
+
+  void clearFavorites() {
+    favoritePlaces.clear();
+    saveFavorites(); // persist changes
   }
 
   // Delete a place from Firestore

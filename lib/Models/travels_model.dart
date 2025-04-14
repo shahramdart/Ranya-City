@@ -7,6 +7,7 @@ class TravelDestination {
   final double latitude;
   final double longitude;
   final String category; // Added category field
+  final String towns; // Added towns field
 
   TravelDestination({
     required this.id,
@@ -17,6 +18,7 @@ class TravelDestination {
     required this.latitude,
     required this.longitude,
     required this.category, // Include category in constructor
+    required this.towns, // Include towns in constructor
   });
 
   // From map function for Firestore data
@@ -33,6 +35,7 @@ class TravelDestination {
           ? double.tryParse(map['rate'].toString()) ?? 0.0
           : 0.0,
       category: map['category'] ?? '', // Extract category from Firestore map
+      towns: map['towns'] ?? '', // Extract towns from Firestore map
     );
   }
 
@@ -46,6 +49,7 @@ class TravelDestination {
       'longitude': longitude,
       'rate': rate,
       'category': category, // Include category in Firestore write
+      'towns': towns, // Include towns in Firestore write
     };
   }
 }
