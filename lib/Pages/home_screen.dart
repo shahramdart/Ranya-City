@@ -418,99 +418,111 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SizedBox(height: AppSizes.blockSizeHorizontal * 5),
 
-                        // Town dropdown
-                        Obx(() => MyCustomDropDown(
-                              menuItemwidth: screenWidth * 0.92,
-                              dy: 10,
-                              dx: 2,
-                              value: selectedTown.value,
-                              width: double.infinity,
-                              onChanged: (value) {
-                                selectedTown.value = value;
-                                appServices.selectedTown.value = value;
-                                appServices
-                                    .updateAvailableCategoriesForTown(); // Load categories for selected town
-                              },
-                              items: [
-                                DropdownMenuItem<String>(
-                                  value: null,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        "هەموو شوێنەکان",
-                                        style: TextStyle(
-                                            fontFamily: "kurdish",
-                                            fontSize: 16),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                ...appServices.towns
-                                    .map((town) => DropdownMenuItem(
-                                          value: town,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Text(town,
-                                                  style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontFamily: "kurdish")),
-                                            ],
-                                          ),
-                                        )),
-                              ],
-                            )),
-
-                        SizedBox(height: 10),
-
-                        // Category dropdown
-                        Obx(() => MyCustomDropDown(
-                              menuItemwidth: screenWidth * 0.92,
-                              dy: -40,
-                              dx: 2,
-                              value: selectedCategory.value,
-                              width: double.infinity,
-                              onChanged: (value) {
-                                selectedCategory.value = value;
-                              },
-                              items: [
-                                DropdownMenuItem<String>(
-                                  value: null,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        "هەموو ناوچەکان",
-                                        style: TextStyle(
-                                            fontFamily: "kurdish",
-                                            fontSize: 16),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                ...appServices.categoriesForSelectedTown
-                                    .map((category) => DropdownMenuItem(
-                                          value: category,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                category,
-                                                style: TextStyle(
-                                                  fontSize: 18,
+                        Row(
+                          children: [
+                            // Town dropdown
+                            Expanded(
+                              child: Obx(() => MyCustomDropDown(
+                                    menuItemwidth:
+                                        screenWidth * 0.44, // Half width
+                                    dy: 10,
+                                    dx: 2,
+                                    value: selectedTown.value,
+                                    width: double.infinity,
+                                    onChanged: (value) {
+                                      selectedTown.value = value;
+                                      appServices.selectedTown.value = value;
+                                      appServices
+                                          .updateAvailableCategoriesForTown();
+                                    },
+                                    items: [
+                                      DropdownMenuItem<String>(
+                                        value: null,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              "هەموو شوێنەکان",
+                                              style: TextStyle(
                                                   fontFamily: "kurdish",
+                                                  fontSize: 16),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      ...appServices.towns
+                                          .map((town) => DropdownMenuItem(
+                                                value: town,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(town,
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            fontFamily:
+                                                                "kurdish")),
+                                                  ],
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        )),
-                              ],
-                            )),
+                                              )),
+                                    ],
+                                  )),
+                            ),
+                            const SizedBox(
+                                width: 12), // space between dropdowns
 
-                        SizedBox(height: screenHeight * 0.1),
+                            // Category dropdown
+                            Expanded(
+                              child: Obx(() => MyCustomDropDown(
+                                    menuItemwidth: screenWidth * 0.44,
+                                    dy: -40,
+                                    dx: 2,
+                                    value: selectedCategory.value,
+                                    width: double.infinity,
+                                    onChanged: (value) {
+                                      selectedCategory.value = value;
+                                    },
+                                    items: [
+                                      DropdownMenuItem<String>(
+                                        value: null,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              "هەموو ناوچەکان",
+                                              style: TextStyle(
+                                                  fontFamily: "kurdish",
+                                                  fontSize: 16),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      ...appServices.categoriesForSelectedTown
+                                          .map((category) => DropdownMenuItem(
+                                                value: category,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      category,
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontFamily:
+                                                              "kurdish"),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )),
+                                    ],
+                                  )),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: screenHeight * 0.2),
 
                         // Buttons
                         Row(
@@ -532,7 +544,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 appServices.selectedTown.value = null;
                                 selectedCategory.value = null;
                                 selectedTown.value = null;
-                                appServices.fetchPlaces(); // full reset
+                                appServices.fetchPlaces();
                                 Get.back();
                               },
                               height: AppSizes.blockSizeHorizontal * 12,
