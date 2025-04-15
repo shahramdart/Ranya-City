@@ -94,7 +94,7 @@ class AppServices extends GetxController {
       Query query = FirebaseFirestore.instance.collection('places');
 
       if (selectedTown.value != null) {
-        query = query.where('town', isEqualTo: selectedTown.value);
+        query = query.where('towns', isEqualTo: selectedTown.value);
       }
 
       QuerySnapshot snapshot = await query.get();
@@ -177,7 +177,7 @@ class AppServices extends GetxController {
       Query query = FirebaseFirestore.instance.collection('places');
 
       if (selectedTown.value != null) {
-        query = query.where('town', isEqualTo: selectedTown.value); // ✅ fixed
+        query = query.where('towns', isEqualTo: selectedTown.value); // ✅ fixed
       }
 
       if (selectedCategory.value != null) {
@@ -213,7 +213,7 @@ class AppServices extends GetxController {
     try {
       final snapshot = await FirebaseFirestore.instance
           .collection('places')
-          .where('town', isEqualTo: selectedTown.value) // ✅ fixed
+          .where('towns', isEqualTo: selectedTown.value) // ✅ fixed
           .get();
 
       final Set<String> foundCategories = snapshot.docs
