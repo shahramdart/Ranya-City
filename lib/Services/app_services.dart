@@ -26,8 +26,25 @@ class AppServices extends GetxController {
     'نوسینگە',
     'بازاڕ',
     'سوپەرمارکێت',
+    'نەخۆشخانە',
+    'یاریگا',
+    'مۆڵ',
+    'دووکان',
+    'پێشانگای ئەلیکترۆنی',
+    'مەشتەل',
+    'پێشانگای ئۆتۆمبێل',
+    'پێشانگای موبلیات',
     'کتێبخانە',
+    'هۆڵی وەرزشی',
+    'زێڕنگر',
+    'دایانگە',
+    'پیشەسازی',
+    'کۆگا',
+    'کارگە',
     'مۆزەخانە',
+    'باخچەی ساوایان',
+    'ئارایشگا',
+    'تەرمیناڵ',
   ];
 
   // Towns list
@@ -153,61 +170,62 @@ class AppServices extends GetxController {
     fetchPlacesByTownAndCategory();
   }
 
- Future<void> fetchPlacesByTownAndCategory() async {
-  _isLoading.value = true;
+  Future<void> fetchPlacesByTownAndCategory() async {
+    _isLoading.value = true;
 
-  try {
-    Query query = FirebaseFirestore.instance.collection('places');
+    try {
+      Query query = FirebaseFirestore.instance.collection('places');
 
-    if (selectedTown.value != null) {
-      query = query.where('town', isEqualTo: selectedTown.value); // ✅ fixed
+      if (selectedTown.value != null) {
+        query = query.where('town', isEqualTo: selectedTown.value); // ✅ fixed
+      }
+
+      if (selectedCategory.value != null) {
+        query = query.where('category', isEqualTo: selectedCategory.value);
+      }
+
+      QuerySnapshot snapshot = await query.get();
+
+      final places = snapshot.docs.map((doc) {
+        return TravelDestination.fromMap(
+            doc.data() as Map<String, dynamic>, doc.id);
+      }).toList();
+
+      popular.value = places;
+      recommendate.value = places;
+
+      noDataMessage.value =
+          places.isEmpty ? "هیچ شوێنێک بەو فلتەرە نەدۆزرایەوە" : '';
+    } catch (e) {
+      noDataMessage.value = "هەڵە لە کاتێک فلتەرکردنەوە.";
+      print("Error fetching by town & category: $e");
+    } finally {
+      _isLoading.value = false;
+    }
+  }
+
+  Future<void> updateAvailableCategoriesForTown() async {
+    if (selectedTown.value == null) {
+      categoriesForSelectedTown.assignAll(categories);
+      return;
     }
 
-    if (selectedCategory.value != null) {
-      query = query.where('category', isEqualTo: selectedCategory.value);
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('places')
+          .where('town', isEqualTo: selectedTown.value) // ✅ fixed
+          .get();
+
+      final Set<String> foundCategories = snapshot.docs
+          .map((doc) =>
+              (doc.data() as Map<String, dynamic>)['category'] as String)
+          .toSet();
+
+      categoriesForSelectedTown.assignAll(foundCategories);
+    } catch (e) {
+      print("Error loading categories for town: $e");
     }
-
-    QuerySnapshot snapshot = await query.get();
-
-    final places = snapshot.docs.map((doc) {
-      return TravelDestination.fromMap(
-          doc.data() as Map<String, dynamic>, doc.id);
-    }).toList();
-
-    popular.value = places;
-    recommendate.value = places;
-
-    noDataMessage.value =
-        places.isEmpty ? "هیچ شوێنێک بەو فلتەرە نەدۆزرایەوە" : '';
-  } catch (e) {
-    noDataMessage.value = "هەڵە لە کاتێک فلتەرکردنەوە.";
-    print("Error fetching by town & category: $e");
-  } finally {
-    _isLoading.value = false;
   }
-}
-
-Future<void> updateAvailableCategoriesForTown() async {
-  if (selectedTown.value == null) {
-    categoriesForSelectedTown.assignAll(categories);
-    return;
-  }
-
-  try {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('places')
-        .where('town', isEqualTo: selectedTown.value) // ✅ fixed
-        .get();
-
-    final Set<String> foundCategories = snapshot.docs
-        .map((doc) => (doc.data() as Map<String, dynamic>)['category'] as String)
-        .toSet();
-
-    categoriesForSelectedTown.assignAll(foundCategories);
-  } catch (e) {
-    print("Error loading categories for town: $e");
-  }
-}
 
 // Add this reactive list at the top:
   RxList<String> categoriesForSelectedTown = <String>[].obs;
@@ -222,8 +240,6 @@ Future<void> updateAvailableCategoriesForTown() async {
   }
 
   RxList<String> favoritePlaces = <String>[].obs;
-
-  
 
   bool isFavorite(String placeId) {
     return favoritePlaces.contains(placeId);
